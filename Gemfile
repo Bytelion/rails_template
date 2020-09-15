@@ -25,6 +25,11 @@ gem 'rack-cors'
 gem 'devise_token_auth'
 gem 'omniauth-apple'
 
+# ActiveAdmin
+gem 'activeadmin'
+gem 'arctic_admin'
+gem 'activeadmin_addons'
+
 # HTTP Requests
 gem 'httparty'
 

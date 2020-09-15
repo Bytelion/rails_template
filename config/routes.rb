@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   get '/rails/mailers' => "rails/mailers#index"
   get '/rails/mailers/*path' => "rails/mailers#preview"
 
-  devise_for :users
+  ActiveAdmin.routes(self)
+  devise_for :users, ActiveAdmin::Devise.config
 
   scope module: :v1, constraints: ApiVersion.new('v1', true) do
     namespace :auth do

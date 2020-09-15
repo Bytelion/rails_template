@@ -1,0 +1,53 @@
+// SASS variable overrides must be declared before loading up Active Admin's styles.
+//
+// To view the variables that Active Admin provides, take a look at
+// `app/assets/stylesheets/active_admin/mixins/_variables.scss` in the
+// Active Admin source.
+//
+// For example, to change the sidebar width:
+// $sidebar-width: 242px;
+
+// Active Admin's got SASS!
+@import 'activeadmin_addons/all';
+@import "arctic_admin/base";
+
+// Example overrides for active admin SCSS
+body.index {
+  .table_actions {
+    .member_link { background-color: #00AEEF; }
+  }
+  .scopes {
+    .scope {
+      a { color: #00AEEF; }
+    }
+    .scope.selected {
+      a {
+        background-color: #00AEEF;
+        border-color: #00AEEF;
+        color: #FFF;
+      }
+    }
+  }
+}
+
+#title_bar {
+  #titlebar_right {
+    .action_item {
+      a { background-color: #00AEEF; }
+    }
+  }
+}
+
+.header {
+  #tabs {
+    li.current {
+      a { color: #00AEEF; }
+    }
+  }
+}
+
+input[type="submit"] {
+  background-color: #00AEEF;
+}
+
+a { color: #00AEEF; }
