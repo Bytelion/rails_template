@@ -1,0 +1,95 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.5.1-stretch-node
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: vendor/bundle
+          PGHOST: 127.0.0.1
+          PGUSER: rails_api_test
+          RAILS_ENV: test
+      - image: redis
+      - image: circleci/postgres:9.5-alpine
+        environment:
+          POSTGRES_USER: rails_api_test
+          POSTGRES_DB: rails_api_test
+          POSTGRES_PASSWORD: ""
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "Gemfile.lock" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: install dependencies
+          command: |
+            bundle install --jobs=4 --retry=3 --path vendor/bundle
+
+      - save_cache:
+          paths:
+            - ./vendor/bundle
+          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+
+      # Database setup
+      - run: bundle exec rake db:create
+      - run: bundle exec rake db:schema:load
+
+      # run tests!
+      - run:
+          name: run tests
+          command: |
+            mkdir /tmp/test-results
+            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
+
+            bundle exec rspec --format progress \
+                            --format RspecJunitFormatter \
+                            --out /tmp/test-results/rspec.xml \
+                            --format progress \
+                            $TEST_FILES
+      # Security analysis
+      - run: bundle exec brakeman
+
+      # collect reports
+      - store_test_results:
+          path: /tmp/test-results
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: test-results
+  # Example to deploy to an EC2 instance
+  #deploy-production:
+  #  machine:
+  #    enabled: true
+  #  working_directory: ~/repo
+  #  steps:
+  #    - checkout
+  #    - add_ssh_keys
+  #    - run:
+  #        name: Add AWS EC2 To Known Hosts
+  #        command: |
+  #          SSH_HOST=${SERVER_HOST_PROD}
+  #          ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
+  #    - run:
+  #        name: AWS EC2 Deploy
+  #        command: |
+  #          SSH_HOST=${SERVER_HOST_PROD}
+  #          ssh $SSH_NAME@$SSH_HOST "./deploy.sh"
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      #- deploy-production:
+      #    requires:
+      #        - build
+      #    filters:
+      #      branches:
+      #        only: master
