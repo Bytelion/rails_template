@@ -9,6 +9,7 @@ The following gems are already integrated into the project.
 * [RSpec](https://github.com/rspec/rspec-rails) is used for the testing framework
 * [Rspec API Documentation](https://github.com/zipmark/rspec_api_documentation) is included to generate tests based on the rspec tests in the acceptance folder
 * [Brakeman](https://github.com/presidentbeef/brakeman) is used to scan the application for vulnerabilities, can be included in the build process before deployment
+* [Active Admin](https://github.com/activeadmin/activeadmin) can be used to view and manage the data within the API.
 
 ## Project Setup
 ### Install Ruby
@@ -23,6 +24,22 @@ bundle install
 rails db:create
 # Run any migrations that have been created
 rails db:migrate
+# Seed the db with data such as the initial admin user
+rails db:seed
 # Start the rails server
 rails s
 ```
+
+## Active Admin
+Regular users can have admin privileges that will allow them to access the admin panel. Users with admin privileges can easily view and modify data in the database.
+
+### Generate New Admin Page
+To generate an admin page for a resource use the following command replacing ```User``` with the model you are creating the page for.
+```
+rails g active_admin:resource User
+```
+This will create a file at the following path, ```app/admin/users.rb```.
+More info on generating resources and defining functionality for an admin page can be found in the [Active Admin Documentation](https://activeadmin.info/2-resource-customization.html#rename-the-resource).
+
+### Customize Styles
+You can modify the styles of the current active admin theme in the ```app/assets/stylesheets/active_admin.scss``` file. An example for this repo has been added to the file to change the colors of the current theme.
