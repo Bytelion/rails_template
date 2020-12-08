@@ -49,3 +49,12 @@ You can modify the styles of the current active admin theme in the ```app/assets
 [RuboCop](https://docs.rubocop.org/rubocop/1.2/index.html) is provided to keep the ruby section of the codebase clean.
 
 The configuration of RuboCop can be changed in the ```.rubocop.yml``` file. It is currently setup to use the rails and rspec rubocop gems and to ignore certain folders and files that do not need to be linted.
+
+## SimpleCov
+[SimpleCov](https://github.com/simplecov-ruby/simplecov) is included to help provide insight on the amount of code is covered by the test suite.
+
+The configuration of SimpleCov can be changed in the ```spec/spec_helper.rb``` file.
+
+Coverage results can be viewed locally after running ```bundle exec rspec``` in the ```coverage/index.html``` file.
+
+Builds in CircleCI generate the results automatically in the artifacts section to provide record of the code coverage throughout builds.
