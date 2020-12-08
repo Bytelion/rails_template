@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   devise_for :users, ActiveAdmin::Devise.config
 
-  scope module: :v1, constraints: ApiVersion.new('v1', true) do
+  scope module: :v1, constraints: ApiVersion.new('v1', default: true) do
     namespace :auth do
       mount_devise_token_auth_for 'User',
         defaults: { format: :json },
