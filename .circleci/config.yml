@@ -73,6 +73,8 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
+      - store_artifacts:
+          path: coverage
           
   # Example to deploy to an EC2 instance
   #deploy-production:

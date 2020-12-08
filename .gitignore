@@ -24,3 +24,6 @@
 
 # Ignore Mac DS_Store
 .DS_Store
+
+# Ignore coverage results
+coverage
