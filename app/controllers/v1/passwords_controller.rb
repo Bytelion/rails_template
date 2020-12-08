@@ -2,8 +2,10 @@
 
 module V1
   class PasswordsController < DeviseTokenAuth::PasswordsController
+    # rubocop:disable Rails/LexicallyScopedActionFilter
     before_action :validate_redirect_url_param, only: %i[create edit]
     skip_before_action :verify_authenticity_token, only: %i[create edit update]
+    # rubocop:enable Rails/LexicallyScopedActionFilter
 
     private
 

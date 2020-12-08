@@ -17,9 +17,19 @@ AllCops:
 
 # Metrics
 Metrics/BlockLength:
-  ExcludedMethods: ['ActiveAdmin.register']
+  IgnoredMethods: ['ActiveAdmin.register', 'resource']
 Metrics/MethodLength:
-  ExcludedMethods: ['configure_permitted_parameters']
+  IgnoredMethods: ['configure_permitted_parameters']
+  Max: 25
+Metrics/AbcSize:
+  Max: 20
+Metrics/ClassLength:
+  Max: 200
+  
+# Layouts
+Layout/LineLength:
+  Exclude:
+    - 'spec/**/*'
 
 # Style
 Style/Documentation:
@@ -27,4 +37,6 @@ Style/Documentation:
 
 # Rspec
 RSpec/MultipleExpectations:
+  Enabled: false
+RSpec/ExampleLength:
   Enabled: false

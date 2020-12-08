@@ -2,7 +2,9 @@
 
 module V1
   class SessionsController < DeviseTokenAuth::SessionsController
+    # rubocop:disable Rails/LexicallyScopedActionFilter
     skip_before_action :verify_authenticity_token, only: :create
+    # rubocop:enable Rails/LexicallyScopedActionFilter
     respond_to :json
 
     private

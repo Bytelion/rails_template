@@ -33,7 +33,7 @@ class User < ApplicationRecord
   end
 
   def self.from_google(auth)
-    temp_user = where(email: auth['email']).first
+    temp_user = find_by(email: auth['email'])
     if temp_user.blank? || temp_user.provider == auth['provider']
       get_omniauth_user(
         uid: auth['uid'],
@@ -51,7 +51,7 @@ class User < ApplicationRecord
   end
 
   def self.from_facebook(auth)
-    temp_user = where(email: auth['email']).first
+    temp_user = find_by(email: auth['email'])
     if temp_user.blank? || temp_user.provider == auth['provider']
       get_omniauth_user(
         uid: auth['id'],
@@ -69,7 +69,7 @@ class User < ApplicationRecord
   end
 
   def self.from_apple(auth)
-    temp_user = where(email: auth['email']).first
+    temp_user = find_by(email: auth['email'])
     if temp_user.blank? || temp_user.provider == auth['provider']
       get_omniauth_user(
         uid: auth['id'],
@@ -106,12 +106,11 @@ class User < ApplicationRecord
 
   def self.generate_username(first_name, last_name)
     username = "#{first_name}_#{last_name}".parameterize(separator: '_')
-    username = get_unique_username(username)
+    get_unique_username(username)
   end
 
   def self.get_unique_username(username)
     taken_usernames = User.where('username LIKE ?', "#{username}%").pluck(:username)
-    puts taken_usernames.to_json
     return username unless taken_usernames.include?(username)
 
     (2..(taken_usernames.count + 2)).each do |i|

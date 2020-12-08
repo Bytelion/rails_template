@@ -2,10 +2,17 @@
 
 module V1
   class RegistrationsController < DeviseTokenAuth::RegistrationsController
+    # rubocop:disable Rails/LexicallyScopedActionFilter
     skip_before_action :verify_authenticity_token, only: %i[create update omniauth]
     before_action :configure_sign_up_params, only: [:create]
     before_action :configure_update_params, only: [:update]
     before_action :validate_account_update_params, only: [:update]
+    # rubocop:enable Rails/LexicallyScopedActionFilter
+
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/CyclomaticComplexity
+    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/PerceivedComplexity
 
     # POST /auth
     def create
@@ -67,7 +74,6 @@ module V1
     end
 
     # PUT /auth
-
     def omniauth
       if params['provider'] == 'google' && google_auth?(params['auth_token'])
         @resource = resource_class.from_google(params)
@@ -141,6 +147,11 @@ module V1
       end
     end
 
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/CyclomaticComplexity
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/PerceivedComplexity
+
     private
 
     def configure_sign_up_params
@@ -153,7 +164,10 @@ module V1
 
     # Used to ensure the user is a member of google
     def google_auth?(access_token)
-      response = HTTParty.get('https://www.googleapis.com/oauth2/v3/userinfo', headers: { 'Authorization' => "Bearer #{access_token}" })
+      response = HTTParty.get(
+        'https://www.googleapis.com/oauth2/v3/userinfo',
+        headers: { 'Authorization' => "Bearer #{access_token}" }
+      )
       if response['sub'] == params['uid'] && response['email'] == params['email']
         true
       else
@@ -163,12 +177,18 @@ module V1
 
     # Used to ensure the user is a member of facebook
     def facebook_auth(access_token)
-      response = HTTParty.get("https://graph.facebook.com/v3.2/me?fields=id%2Cemail%2Cfirst_name%2Clast_name%2Cpicture&access_token=#{access_token}", headers: { 'Authorization' => "Bearer #{access_token}" })
+      response = HTTParty.get(
+        'https://graph.facebook.com/v3.2/me?fields=id%2Cemail%2Cfirst_name%2C' \
+          "last_name%2Cpicture&access_token=#{access_token}",
+        headers: { 'Authorization' => "Bearer #{access_token}" }
+      )
       JSON.parse(response.to_json)
     end
 
     # Used to check if identity token from Apple is valid
-    def apple_auth(fullName, userId, identityToken)
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/CyclomaticComplexity
+    def apple_auth(full_name, user_id, identity_token)
       response_hash = nil
 
       # Get cert with public keys from Apple to verify identy token
@@ -176,7 +196,7 @@ module V1
       apple_public_certificate = JSON.parse(apple_public_key_response)
 
       # Determine alg used to encode identityToken
-      header_segment = JSON.parse(Base64.decode64(identityToken.split('.').first))
+      header_segment = JSON.parse(Base64.decode64(identity_token.split('.').first))
       alg = header_segment['alg']
 
       begin
@@ -188,31 +208,35 @@ module V1
         # apple_key_index is used to iterate through the public keys sent by Apple
         apple_key_index ||= 0
         # prep Apple public key for use with JWT.decode()
-        apple_public_key_hash = ActiveSupport::HashWithIndifferentAccess.new(apple_public_certificate['keys'][apple_key_index])
+        apple_public_key_hash = ActiveSupport::HashWithIndifferentAccess.new(
+          apple_public_certificate['keys'][apple_key_index]
+        )
         apple_public_jwk = JWT::JWK.import(apple_public_key_hash)
 
         # JWT.decode decodes identityToken and verifies identity token against public key from Apple
         # - throws if identityToken is not valid/verified or expired
-        token_data ||= ::JWT.decode(identityToken, apple_public_jwk.public_key, true, { algorithm: alg })[0]
+        token_data ||= ::JWT.decode(identity_token, apple_public_jwk.public_key, true, { algorithm: alg })[0]
 
         # Double check that Apple user id matches user id in decoded identity token
-        if token_data.key?('sub') && token_data.key?('email') && userId == token_data['sub']
+        if token_data.key?('sub') && token_data.key?('email') && user_id == token_data['sub']
           # Add fields to decoded identity token needed to create Argo user
           token_data['provider'] = 'apple'
-          token_data['id'] = userId
-          nameJSON = JSON.parse(fullName)
-          token_data['last_name'] = nameJSON['familyName']
-          token_data['first_name'] = nameJSON['givenName']
+          token_data['id'] = user_id
+          name_json = JSON.parse(full_name)
+          token_data['last_name'] = name_json['familyName']
+          token_data['first_name'] = name_json['givenName']
 
           response_hash = token_data
         end
       rescue StandardError => e
         # Iterate verification process through 3 public keys from Apple if needed
         retry if (apple_key_index += 1) < 3
-        puts e
+        logger.info e
       end
       response_hash
     end
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/CyclomaticComplexity
 
     def render_create_error_bad_credentials
       render_error(401, I18n.t('devise_token_auth.sessions.bad_credentials'))
