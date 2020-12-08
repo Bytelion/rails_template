@@ -1,7 +1,7 @@
 # Rails API Template
 
 [![Gem](https://img.shields.io/gem/v/rails?label=rails)](https://rubygems.org/gems/rails)
-[![Badge](https://img.shields.io/badge/ruby-v2.5.1-blue)](https://www.ruby-lang.org/en/news/2018/03/28/ruby-2-5-1-released/)
+[![Badge](https://img.shields.io/badge/ruby-v2.7.1-blue)](https://www.ruby-lang.org/en/news/2020/03/31/ruby-2-7-1-released/)
 
 This template is built to start a barebones rails API.
 The following gems are already integrated into the project.
@@ -13,7 +13,7 @@ The following gems are already integrated into the project.
 
 ## Project Setup
 ### Install Ruby
-Version 2.5.1 is the inital version required for this project. It can be downloaded [here](https://www.ruby-lang.org/en/news/2018/03/28/ruby-2-5-1-released) or use a Ruby version manager to install several versions such as [rbenv](https://github.com/rbenv/rbenv).
+Version 2.7.1 is the inital version required for this project. It can be downloaded [here](https://www.ruby-lang.org/en/news/2020/03/31/ruby-2-7-1-released/) or use a Ruby version manager to install several versions such as [rbenv](https://github.com/rbenv/rbenv).
 ### Install Postgresql
 [Postgresql](https://www.postgresql.org/download/) must be installed locally to create and manage the database that will be used in this project.
 ### Terminal Setup
