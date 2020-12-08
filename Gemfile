@@ -43,6 +43,11 @@ group :development, :test do
   gem 'rspec_junit_formatter'
   gem 'rspec_api_documentation'
   gem 'brakeman'
+  
+  # Code Cleanliness
+  gem 'rubocop', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
 end
 
 group :test do

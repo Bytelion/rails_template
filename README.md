@@ -2,6 +2,7 @@
 
 [![Gem](https://img.shields.io/gem/v/rails?label=rails)](https://rubygems.org/gems/rails)
 [![Badge](https://img.shields.io/badge/ruby-v2.7.1-blue)](https://www.ruby-lang.org/en/news/2020/03/31/ruby-2-7-1-released/)
+[![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop-hq/rubocop)
 
 This template is built to start a barebones rails API.
 The following gems are already integrated into the project.
@@ -43,3 +44,8 @@ More info on generating resources and defining functionality for an admin page c
 
 ### Customize Styles
 You can modify the styles of the current active admin theme in the ```app/assets/stylesheets/active_admin.scss``` file. An example for this repo has been added to the file to change the colors of the current theme.
+
+## RuboCop
+[RuboCop](https://docs.rubocop.org/rubocop/1.2/index.html) is provided to keep the ruby section of the codebase clean.
+
+The configuration of RuboCop can be changed in the ```.rubocop.yml``` file. It is currently setup to use the rails and rspec rubocop gems and to ignore certain folders and files that do not need to be linted.

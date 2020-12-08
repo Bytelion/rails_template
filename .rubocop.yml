@@ -1,0 +1,30 @@
+require:
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - bin/**/*
+    - tmp/**/*
+    - vendor/**/*
+    - log/**/*
+    - db/**/*
+    - config/**/*
+    - Gemfile.lock
+    - yarn.lock
+    - node_modules/**/*
+
+# Metrics
+Metrics/BlockLength:
+  ExcludedMethods: ['ActiveAdmin.register']
+Metrics/MethodLength:
+  ExcludedMethods: ['configure_permitted_parameters']
+
+# Style
+Style/Documentation:
+    Enabled: false
+
+# Rspec
+RSpec/MultipleExpectations:
+  Enabled: false

@@ -43,9 +43,9 @@ jobs:
       - run: bundle exec rake db:create
       - run: bundle exec rake db:schema:load
 
-      # run tests!
+      # Run tests
       - run:
-          name: run tests
+          name: Run Rspec Tests
           command: |
             mkdir /tmp/test-results
             TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
@@ -55,6 +55,15 @@ jobs:
                             --out /tmp/test-results/rspec.xml \
                             --format progress \
                             $TEST_FILES
+                            
+      # Run RuboCop
+      - run:
+          name: Run RuboCop
+          command: |
+            bundle exec rubocop --format junit \
+              --out /tmp/test-results/rubocop.xml \
+              --display-only-failed
+              
       # Security analysis
       - run: bundle exec brakeman
 
@@ -64,6 +73,7 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
+          
   # Example to deploy to an EC2 instance
   #deploy-production:
   #  machine:
