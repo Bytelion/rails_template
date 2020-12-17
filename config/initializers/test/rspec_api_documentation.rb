@@ -4,4 +4,4 @@ module RspecApiDocumentation
       last_response.body.encode("utf-8")
     end
   end
-end
+end if Rails.env.test?
