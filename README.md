@@ -19,6 +19,8 @@ Version 2.7.1 is the inital version required for this project. It can be downloa
 [Postgresql](https://www.postgresql.org/download/) must be installed locally to create and manage the database that will be used in this project.
 ### Terminal Setup
 ```
+# Change your local git hooks path
+git config --local core.hooksPath .githooks/
 # Install all of the dependencies
 bundle install
 # Create the development and test databases
